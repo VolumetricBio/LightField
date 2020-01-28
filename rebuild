@@ -103,11 +103,11 @@ function rebuild () {
                 red-bar "Run change-version-number.sh manually."
                 exit 1
             fi
+        else
+            red-bar "src/version.h does not exist, and the version number is unconfigured."
+            red-bar "Run change-version-number.sh manually."
+            exit 1
         fi
-    else
-        red-bar "src/version.h does not exist, and the version number is unconfigured."
-        red-bar "Run change-version-number.sh manually."
-        exit 1
     fi
 
     # shellcheck disable=SC2164
