@@ -8,7 +8,7 @@ TARGET              = set-projector-power
 SOURCES             = set-projector-power.cpp
 OBJECTS             = $(SOURCES:.cpp=.o)
 
-CFLAGS              = -std=gnu++17 -Wall -Wextra -Werror -pedantic
+CFLAGS              = -std=gnu++17 -Wall -Wextra -pedantic
 LFLAGS              = 
 ifeq ($(BUILD),debug)
 CFLAGS             += -D_DEBUG -g -Og
