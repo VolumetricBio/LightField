@@ -60,7 +60,7 @@ fi
 
 ARCHITECTURE=amd64
 RELEASE_TRAIN=dlp4710
-VERSION=1.0.11.0
+VERSION=1.0.10.3
 
 trap error-trap ERR
 set -e

@@ -1,3 +1,9 @@
+lightfield (1.0.10.3) stable; urgency=medium
+
+  * Fixed: Software upgrade issue.
+
+ -- LightField packager <lightfield-packager@volumetricbio.com>  Thu, 06 Feb 2020 18:07:35 -0800
+
 lightfield (1.0.10.0) stable; urgency=medium
 
   * Fixed: LightField will now notice a USB stick that was connected before it starts.
