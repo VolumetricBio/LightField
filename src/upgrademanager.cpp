@@ -51,6 +51,11 @@ namespace {
         "Release-Train"
     };
 
+    QMap<QString, QString> const KernelArchToDebianArch {
+        { "x86_64", "amd64" },
+        { "armv7l", "armhf" },
+    };
+
     QStringList _EnsureMapContainsKeys( QMap<QString, QString> map, QStringList keyList ) {
         QStringList result;
         for ( auto const& key : keyList ) {
@@ -70,9 +75,20 @@ UpgradeManager::UpgradeManager( QObject* parent ): QObject( parent ) {
 
     {
         utsname u;
-
         uname( &u );
+
         _architecture = u.machine;
+        if ( KernelArchToDebianArch.contains( _architecture ) ) {
+            _architecture = KernelArchToDebianArch[_architecture];
+        }
+        debug(
+            "UpgradeManager::`ctor:\n"
+            "  + Linux kernel architecture: %s\n"
+            "  + Debian architecture:       %s\n"
+            "",
+            u.machine,
+            _architecture.toUtf8( ).data( )
+        );
     }
 
     QObject::connect( _processRunner, &ProcessRunner::readyReadStandardError,  _stderrLogger, &StdioLogger::read );
