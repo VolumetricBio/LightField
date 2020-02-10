@@ -81,14 +81,7 @@ UpgradeManager::UpgradeManager( QObject* parent ): QObject( parent ) {
         if ( KernelArchToDebianArch.contains( _architecture ) ) {
             _architecture = KernelArchToDebianArch[_architecture];
         }
-        debug(
-            "UpgradeManager::`ctor:\n"
-            "  + Linux kernel architecture: %s\n"
-            "  + Debian architecture:       %s\n"
-            "",
-            u.machine,
-            _architecture.toUtf8( ).data( )
-        );
+        debug( "UpgradeManager::`ctor: Kernel architecture: %s; Debian architecture: %s\n", u.machine, _architecture.toUtf8( ).data( ) );
     }
 
     QObject::connect( _processRunner, &ProcessRunner::readyReadStandardError,  _stderrLogger, &StdioLogger::read );
@@ -670,21 +663,23 @@ void UpgradeManager::aptGetUpdate_succeeded( ) {
     _flushLoggers( );
     debug( "+ UpgradeManager::aptGetUpdate_succeeded: running `apt-get install`\n" );
 
-    QStringList processArgs { "apt-get", "-y", "install", };
-    QString versionNumberSuffix;
+    QString versionNumber { '=' % _kitToInstall->versionString                };
+    QString buildType     { '-' % BuildTypeToString[_kitToInstall->buildType] };
+    QString releaseTrain  { };
 
+    if ( _kitToInstall->releaseTrain != "base" ) {
+        releaseTrain = '-' % _kitToInstall->releaseTrain;
+    }
+
+    QStringList processArgs { "apt-get", "-y", "install", };
     if ( _kitToInstall->version < LIGHTFIELD_VERSION_CODE ) {
-        versionNumberSuffix = '=' % _kitToInstall->versionString;
         processArgs.append( "--allow-downgrades" );
     } else if ( _kitToInstall->version == LIGHTFIELD_VERSION_CODE ) {
         processArgs.append( "--reinstall" );
     }
 
-    if ( _kitToInstall->version <= LIGHTFIELD_VERSION_CODE ) {
-        processArgs.append( "lightfield-common" % versionNumberSuffix );
-    }
-
-    processArgs.append( QString { "lightfield-" % BuildTypeToString[_kitToInstall->buildType] % versionNumberSuffix } );
+    processArgs.append( "lightfield"        % releaseTrain % buildType % versionNumber );
+    processArgs.append( "lightfield-common" % releaseTrain             % versionNumber );
 
     _clearJournals( );
 
