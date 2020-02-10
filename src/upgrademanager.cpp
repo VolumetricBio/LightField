@@ -688,6 +688,7 @@ void UpgradeManager::aptGetUpdate_succeeded( ) {
     QObject::connect   ( _processRunner, &ProcessRunner::succeeded, this, &UpgradeManager::aptGetInstall_succeeded );
     QObject::connect   ( _processRunner, &ProcessRunner::failed,    this, &UpgradeManager::aptGetInstall_failed    );
 
+    debug( "UpgradeManager::aptGetUpdate_succeeded: starting command 'sudo %s'\n", processArgs.join( Space ).toUtf8( ).data( ) );
     _processRunner->start( { "sudo" }, processArgs );
 }
 
