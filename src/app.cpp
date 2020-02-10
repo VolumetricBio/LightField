@@ -242,7 +242,19 @@ void App::_setTheme( ) {
 
 App::App( int& argc, char* argv[] ): QApplication( argc, argv ) {
     _debugManager = new DebugManager;
-    debug( "LightField version %s (built at %s) starting at %s (pid: %d).\n", LIGHTFIELD_VERSION_STRING, g_BuildTimestamp.toUtf8( ).data( ), QDateTime::currentDateTime( ).toString( Qt::ISODate ).toUtf8( ).data( ), getpid( ) );
+    debug(
+        "LightField starting at %s (pid: %d).\n"
+        "  + Version:         %s\n"
+        "  + Release train:   %s\n"
+        "  + Build type:      %s\n"
+        "  + Build date/time: %s\n"
+        "",
+        QDateTime::currentDateTime( ).toString( Qt::ISODate ).toUtf8( ).data( ), getpid( ),
+        LIGHTFIELD_VERSION_STRING,
+        LIGHTFIELD_VERSION_RELEASE_TRAIN,
+        ToString( LIGHTFIELD_VERSION_BUILD_TYPE ),
+        g_BuildTimestamp.toUtf8( ).data( )
+    );
 
     QCoreApplication::setOrganizationName( "Volumetric, Inc." );
     QCoreApplication::setOrganizationDomain( "https://www.volumetricbio.com/" );
