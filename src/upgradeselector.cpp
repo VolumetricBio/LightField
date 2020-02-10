@@ -29,6 +29,15 @@ UpgradeSelector::UpgradeSelector( UpgradeManager* upgradeManager, QWidget* paren
         if ( a.version < b.version ) {
             return 1;
         }
+
+        // then sort forward by release train
+        if ( a.releaseTrain < b.releaseTrain ) {
+            return -1;
+        }
+        if ( a.releaseTrain > b.releaseTrain ) {
+            return 1;
+        }
+
         // then sort forward by build type
         if ( a.buildType < b.buildType ) {
             return -1;
@@ -36,12 +45,25 @@ UpgradeSelector::UpgradeSelector( UpgradeManager* upgradeManager, QWidget* paren
         if ( a.buildType > b.buildType ) {
             return 1;
         }
+
         return 0;
     } );
 
     QStringList kitsListStrings;
     for ( auto const& kit : _availableKits ) {
-        kitsListStrings.append( kit.versionString % ( ( kit.buildType == BuildType::Debug ) ? DebugBuildSuffix : ReleaseBuildSuffix ) );
+        QString releaseTrain;
+        if ( kit.releaseTrain != "base" ) {
+            releaseTrain = " [" % kit.releaseTrain % ']';
+        }
+
+        QString buildType;
+        if ( kit.buildType == BuildType::Debug ) {
+            buildType = DebugBuildSuffix;
+        } else {
+            buildType = ReleaseBuildSuffix;
+        }
+
+        kitsListStrings.append( kit.versionString % releaseTrain % buildType );
     }
 
     auto availableKitsLabel = new QLabel { "Available versions:" };
