@@ -1,5 +1,7 @@
-Metadata-Version: 1
+Metadata-Version: 2
 Version: @@VERSION@@
 Build-Type: @@BUILDTYPE@@
+Architecture: @@ARCHITECTURE@@
+Release-Train: @@RELEASE_TRAIN@@
 Release-Date: @@RELEASEDATE@@
 Description:
